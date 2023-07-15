@@ -13,20 +13,24 @@ btn.addEventListener('click',async()=>{
         function: pickColor,
     },
     async(injectionResults)=>{
-        const color = data.result.sRGBHex;
-        colorGrid.computedStyleMap.backgroundColor = color;
-        colorValue.innerText = color;
-        try{
-            await navigator.clipboard.writeText(color);
+        const [data]=injectionResults;
+        if(data.result){
+            const color = data.result.sRGBHex;
+            colorGrid.computedStyleMap.backgroundColor = color;
+            colorValue.innerText = color;
+            try{
+                await navigator.clipboard.writeText(color);
+            }catch(err){
+                console.error(err);
+            }
         }
     });
-
 });
 
 async function pickColor(){
     try{
         const eyeDropper= new EyeDropper();
-        const selectColor = await eyeDropper.open();
+        return await eyeDropper.open();
         
     }catch(err){
         console.error(err);
